@@ -4,10 +4,6 @@
 This package is designed to **co-exist** with the original [`selfies`](https://github.com/aspuru-guzik-group/selfies) package—install both side by side and import whichever you need.
 
 <p align="center">
-  <a href="https://github.com/KikETs/selfies-psmiles/releases">
-    <img alt="GitHub release" src="https://img.shields.io/github/release/KikETs/selfies-psmiles.svg">
-  </a>
-  <img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/selfies-psmiles.svg">
   <a href="https://opensource.org/licenses/Apache-2.0">
     <img alt="License: Apache 2.0" src="https://img.shields.io/badge/License-Apache%202.0-blue.svg">
   </a>
@@ -44,7 +40,7 @@ pip install selfies-psmiles
 
 ### From GitHub (tagged release recommended)
 ```bash
-pip install "git+https://github.com/<YOUR_GH_ID>/selfies-psmiles.git@v0.1.0"
+pip install "git+https://github.com/KikETs/selfies-psmiles.git"
 ```
 
 ## 🚀 Quick Start
