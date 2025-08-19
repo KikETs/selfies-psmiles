@@ -1,0 +1,32 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "selfies-psmiles"
+version = "0.1.0"
+description = "PSMILES '*' endpoints support for SELFIES via lightweight pre/post-processing."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Your Name", email = "you@example.com" }]
+keywords = ["SELFIES", "SMILES", "PSMILES", "polymer", "chemoinformatics"]
+classifiers = [
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.8",
+  "Topic :: Scientific/Engineering :: Chemistry",
+  "Intended Audience :: Science/Research",
+]
+dependencies = [
+  "selfies>=2.0",  # upstream 라이브러리 의존
+]
+
+[project.urls]
+Homepage = "https://github.com/KikET/selfies-psmiles"
+Repository = "https://github.com/KikET/selfies-psmiles"
+Issues = "https://github.com/KikET/selfies-psmiles/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/selfies_psmiles"]
