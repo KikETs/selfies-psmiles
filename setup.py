@@ -12,14 +12,14 @@ setup(
     name="selfies-psmiles",            # ★ 원본과 공존을 위해 배포명 변경
     version="0.1.0",                   # ★ 당신 버전으로 갱신
     author="Younggyu Kim",
-    author_email="yyy2507@gmail.com",
+    author_email="yyy2507@naver.com",
     description="Unofficial extension of SELFIES adding PSMILES '*' endpoint support",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/KikET/selfies-psmiles",
+    url="https://github.com/KikETs/selfies-psmiles",
     project_urls={
-        "Source": "https://github.com/KikET/selfies-psmiles",
-        "Tracker": "https://github.com/KikET/selfies-psmiles/issues",
+        "Source": "https://github.com/KikETs/selfies-psmiles",
+        "Tracker": "https://github.com/KikETs/selfies-psmiles/issues",
     },
     packages=find_packages(exclude=("tests", "docs", "examples")),
     include_package_data=True,

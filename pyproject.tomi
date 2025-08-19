@@ -9,7 +9,7 @@ description = "PSMILES '*' endpoints support for SELFIES via lightweight pre/pos
 readme = "README.md"
 requires-python = ">=3.8"
 license = { text = "Apache-2.0" }
-authors = [{ name = "Your Name", email = "you@example.com" }]
+authors = [{ name = "Younggyu Kim", email = "yyy2507@naver.com" }]
 keywords = ["SELFIES", "SMILES", "PSMILES", "polymer", "chemoinformatics"]
 classifiers = [
   "License :: OSI Approved :: Apache Software License",
