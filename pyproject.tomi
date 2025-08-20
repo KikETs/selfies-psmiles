@@ -24,9 +24,9 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/KikET/selfies-psmiles"
-Repository = "https://github.com/KikET/selfies-psmiles"
-Issues = "https://github.com/KikET/selfies-psmiles/issues"
+Homepage = "https://github.com/KikETs/selfies-psmiles"
+Repository = "https://github.com/KikETs/selfies-psmiles"
+Issues = "https://github.com/KikETs/selfies-psmiles/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/selfies_psmiles"]

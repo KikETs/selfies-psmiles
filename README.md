@@ -38,7 +38,7 @@ This package is designed to **co-exist** with the original [`selfies`](https://g
 pip install selfies-psmiles
 ```
 
-### From GitHub (tagged release recommended)
+### From GitHub
 ```bash
 pip install "git+https://github.com/KikETs/selfies-psmiles.git"
 ```
