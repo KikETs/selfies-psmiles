@@ -1,13 +1,13 @@
-from selfies.exceptions import EncoderError, SMILESParserError
-from selfies.grammar_rules import get_selfies_from_index
+from .exceptions import EncoderError, SMILESParserError
+from .grammar_rules import get_selfies_psmiles_from_index
 import re
-from selfies.utils.smiles_utils import (
+from .utils.smiles_utils import (
     atom_to_smiles,
     bond_to_smiles,
     smiles_to_mol
 )
 
-from selfies.mol_graph import AttributionMap
+from .mol_graph import AttributionMap
 
 
 
@@ -27,21 +27,21 @@ def _normalize_psmiles(smiles: str) -> str:
     return s
 
 def encoder(smiles: str, strict: bool = True, attribute: bool = False) -> str:
-    """Translates a SMILES string into its corresponding SELFIES string.
+    """Translates a SMILES string into its corresponding selfies_psmiles string.
 
     This translation is deterministic and does not depend on the
     current semantic constraints. Additionally, it preserves the atom order
-    of the input SMILES string; thus, one could generate randomized SELFIES
+    of the input SMILES string; thus, one could generate randomized selfies_psmiles
     strings by generating randomized SMILES strings, and then translating them.
 
-    By nature of SELFIES, it is impossible to represent molecules that
-    violate the current semantic constraints as SELFIES strings.
+    By nature of selfies_psmiles, it is impossible to represent molecules that
+    violate the current semantic constraints as selfies_psmiles strings.
     Thus, we provide the ``strict`` flag to guard against such cases. If
     ``strict=True``, then this function will raise a
-    :class:`selfies.EncoderError` if the input SMILES string represents
+    :class:`selfies_psmiles.EncoderError` if the input SMILES string represents
     a molecule that violates the semantic constraints. If
     ``strict=False``, then this function will not raise any error; however,
-    calling :func:`selfies.decoder` on a SELFIES string generated this
+    calling :func:`selfies_psmiles.decoder` on a selfies_psmiles string generated this
     way will *not* be guaranteed to recover a SMILES string representing
     the original molecule.
 
@@ -52,16 +52,16 @@ def encoder(smiles: str, strict: bool = True, attribute: bool = False) -> str:
         input SMILES string obeys the semantic constraints.
         Defaults to ``True``.
     :param attribute: if an attribution should be returned
-    :return: a SELFIES string translated from the input SMILES string if
+    :return: a selfies_psmiles string translated from the input SMILES string if
              attribute is ``False``, otherwise a tuple is returned of
-             SELFIES string and attribution list.
+             selfies_psmiles string and attribution list.
     :raises EncoderError:  if the input SMILES string is invalid,
         cannot be kekulized, or violates the semantic constraints with
         ``strict=True``.
 
     :Example:
 
-    >>> import selfies as sf
+    >>> import selfies_psmiles as sf
     >>> sf.encoder("C=CF")
     '[C][=C][F]'
 
@@ -73,7 +73,7 @@ def encoder(smiles: str, strict: bool = True, attribute: bool = False) -> str:
         *   Ring bonds across a dot symbol (e.g. ``c1cc([O-].[Na+])ccc1``) or
             ring bonds between atoms that are over 4000 atoms apart.
 
-        Although SELFIES does not have aromatic symbols, this function
+        Although selfies_psmiles does not have aromatic symbols, this function
         *does* support aromatic SMILES strings by internally kekulizing them
         before translation.
     """
@@ -94,7 +94,7 @@ def encoder(smiles: str, strict: bool = True, attribute: bool = False) -> str:
         _check_bond_constraints(mol, smiles)
 
     # invert chirality of atoms where necessary,
-    # such that they are restored when the SELFIES is decoded
+    # such that they are restored when the selfies_psmiles is decoded
     for atom in mol.get_atoms():
         if ((atom.chirality is not None)
                 and mol.has_out_ring_bond(atom.index)
@@ -105,7 +105,7 @@ def encoder(smiles: str, strict: bool = True, attribute: bool = False) -> str:
     attribution_maps = []
     attribution_index = 0
     for root in mol.get_roots():
-        derived = list(_fragment_to_selfies(
+        derived = list(_fragment_to_selfies_psmiles(
             mol, None, root, attribution_maps, attribution_index))
         attribution_index += len(derived)
         fragments.append("".join(derived))
@@ -160,14 +160,14 @@ def _should_invert_chirality(mol, atom):
     return count % 2 != 0  # if odd permutation, should invert chirality
 
 
-def _fragment_to_selfies(mol, bond_into_root, root,
+def _fragment_to_selfies_psmiles(mol, bond_into_root, root,
                          attribution_maps, attribution_index=0):
     derived = []
 
     bond_into_curr, curr = bond_into_root, root
     while True:
         curr_atom = mol.get_atom(curr)
-        token = _atom_to_selfies(bond_into_curr, curr_atom)
+        token = _atom_to_selfies_psmiles(bond_into_curr, curr_atom)
         derived.append(token)
 
         attribution_maps.append(AttributionMap(
@@ -183,9 +183,9 @@ def _fragment_to_selfies(mol, bond_into_root, root,
 
                 rev_bond = mol.get_dirbond(src=bond.dst, dst=bond.src)
                 ring_len = bond.src - bond.dst
-                Q_as_symbols = get_selfies_from_index(ring_len - 1)
+                Q_as_symbols = get_selfies_psmiles_from_index(ring_len - 1)
                 ring_symbol = "[{}Ring{}]".format(
-                    _ring_bonds_to_selfies(rev_bond, bond),
+                    _ring_bonds_to_selfies_psmiles(rev_bond, bond),
                     len(Q_as_symbols)
                 )
 
@@ -207,11 +207,11 @@ def _fragment_to_selfies(mol, bond_into_root, root,
                 # correct offset from branch symbol in
                 # branch tokens
                 start = len(attribution_maps)
-                branch = _fragment_to_selfies(
+                branch = _fragment_to_selfies_psmiles(
                     mol, bond, bond.dst, attribution_maps, len(derived))
-                Q_as_symbols = get_selfies_from_index(len(branch) - 1)
+                Q_as_symbols = get_selfies_psmiles_from_index(len(branch) - 1)
                 branch_symbol = "[{}Branch{}]".format(
-                    _bond_to_selfies(bond, show_stereo=False),
+                    _bond_to_selfies_psmiles(bond, show_stereo=False),
                     len(Q_as_symbols)
                 )
                 end = len(attribution_maps)
@@ -238,26 +238,26 @@ def _fragment_to_selfies(mol, bond_into_root, root,
     return derived
 
 
-def _bond_to_selfies(bond, show_stereo=True):
+def _bond_to_selfies_psmiles(bond, show_stereo=True):
     if not show_stereo and (bond.order == 1):
         return ""
     return bond_to_smiles(bond)
 
 
-def _ring_bonds_to_selfies(lbond, rbond):
+def _ring_bonds_to_selfies_psmiles(lbond, rbond):
     assert lbond.order == rbond.order
 
     if (lbond.order != 1) or all(b.stereo is None for b in (lbond, rbond)):
-        return _bond_to_selfies(lbond, show_stereo=False)
+        return _bond_to_selfies_psmiles(lbond, show_stereo=False)
     else:
         bond_char = "-" if (lbond.stereo is None) else lbond.stereo
         bond_char += "-" if (rbond.stereo is None) else rbond.stereo
         return bond_char
 
 
-def _atom_to_selfies(bond, atom):
+def _atom_to_selfies_psmiles(bond, atom):
     assert not atom.is_aromatic
-    bond_char = "" if (bond is None) else _bond_to_selfies(bond)
+    bond_char = "" if (bond is None) else _bond_to_selfies_psmiles(bond)
     # ensure dummy star prints correctly
     if getattr(atom, "element", None) == "*":
         content = "*"
