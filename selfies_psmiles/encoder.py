@@ -183,7 +183,7 @@ def _fragment_to_selfies_psmiles(mol, bond_into_root, root,
 
                 rev_bond = mol.get_dirbond(src=bond.dst, dst=bond.src)
                 ring_len = bond.src - bond.dst
-                Q_as_symbols = get_selfies_psmiles_from_index(ring_len - 1)
+                Q_as_symbols = get_selfies_from_index(ring_len - 1)
                 ring_symbol = "[{}Ring{}]".format(
                     _ring_bonds_to_selfies_psmiles(rev_bond, bond),
                     len(Q_as_symbols)
@@ -209,7 +209,7 @@ def _fragment_to_selfies_psmiles(mol, bond_into_root, root,
                 start = len(attribution_maps)
                 branch = _fragment_to_selfies_psmiles(
                     mol, bond, bond.dst, attribution_maps, len(derived))
-                Q_as_symbols = get_selfies_psmiles_from_index(len(branch) - 1)
+                Q_as_symbols = get_selfies_from_index(len(branch) - 1)
                 branch_symbol = "[{}Branch{}]".format(
                     _bond_to_selfies_psmiles(bond, show_stereo=False),
                     len(Q_as_symbols)
