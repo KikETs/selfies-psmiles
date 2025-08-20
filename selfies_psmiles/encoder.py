@@ -1,5 +1,5 @@
 from .exceptions import EncoderError, SMILESParserError
-from .grammar_rules import get_selfies_psmiles_from_index
+from .grammar_rules import get_selfies_from_index
 import re
 from .utils.smiles_utils import (
     atom_to_smiles,
